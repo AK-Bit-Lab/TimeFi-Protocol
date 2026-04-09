@@ -1,0 +1,204 @@
+import {
+  uintCV,
+  boolCV,
+  PostConditionMode,
+  FungibleConditionCode,
+  makeStandardSTXPostCondition,
+} from '@stacks/transactions';
+import { openContractCall } from '@stacks/connect';
+import { StacksMainnet, StacksTestnet } from '@stacks/network';
+import { CONTRACT_ADDRESS, CONTRACT_NAMES } from '../config/contracts';
+
+/**
+ * Transaction Service - Build and submit Stacks blockchain transactions.
+ *
+ * Provides functions for interacting with TimeFi smart contracts including
+ * vault creation, withdrawals, rewards claiming, and governance voting.
+ *
+ * @module services/transactions
+ * @author adekunlebamz
+ */
+
+// Determine network from environment variable
+const NETWORK = String(import.meta.env.VITE_NETWORK || 'mainnet').trim().toLowerCase();
+
+// Create appropriate Stacks network instance
+const STACKS_NETWORK = NETWORK === 'mainnet'
+  ? new StacksMainnet()
+  : new StacksTestnet();
+
+/**
+ * logTxEvent - Debug logging for transaction events.
+ * Only logs when VITE_ENABLE_DEBUG is set to 'true'.
+ * @param {...any} args - Arguments to log
+ */
+function logTxEvent(...args) {
+  if (import.meta.env.VITE_ENABLE_DEBUG === 'true') {
+    console.log(...args);
+  }
+}
+
+/**
+ * assertVaultId - Validate that vaultId is provided.
+ * @param {number|undefined|null} vaultId - Vault ID to validate
+ * @throws {Error} If vaultId is missing
+ */
+function assertVaultId(vaultId) {
+  if (vaultId === undefined || vaultId === null) {
+    throw new Error('vaultId is required');
+  }
+}
+
+/**
+ * getContractCallDefaultOptions - Internal helper to get shared transaction options.
+ * @param {string} contractName - Name of the target contract
+ * @param {string} functionName - Name of the Clarity function
+ * @param {any[]} functionArgs - Arguments for the function call
+ * @param {Function} onFinish - Callback on finish
+ * @param {Function} onCancel - Callback on cancel
+ * @private
+ */
+function getContractCallDefaultOptions(contractName, functionName, functionArgs, onFinish, onCancel) {
+  return {
+    network: STACKS_NETWORK,
+    contractAddress: CONTRACT_ADDRESS,
+    contractName,
+    functionName,
+    functionArgs,
+    onFinish: (data) => {
+      logTxEvent(`${functionName} transaction:`, data.txId);
+      onFinish?.(data);
+    },
+    onCancel: () => {
+      logTxEvent(`${functionName} cancelled`);
+      onCancel?.();
+    },
+  };
+}
+
+/**
+ * Build and submit a create-vault transaction
+ * @param {Object} params - Transaction parameters
+ * @param {number} params.amount - Amount to lock in microSTX
+ * @param {number} params.lockDuration - Lock duration in blocks
+ * @param {string} params.senderAddress - Sender's address
+ * @param {Function} params.onFinish - Callback on transaction completion
+ * @param {Function} params.onCancel - Callback on user cancel
+ */
+export async function createVault({ amount, lockDuration, senderAddress, onFinish, onCancel }) {
+  const postConditions = [
+    makeStandardSTXPostCondition(
+      senderAddress,
+      FungibleConditionCode.Equal,
+      amount
+    ),
+  ];
+
+  await openContractCall({
+    ...getContractCallDefaultOptions(CONTRACT_NAMES.VAULT, 'create-vault', [uintCV(amount), uintCV(lockDuration)], onFinish, onCancel),
+    postConditions,
+    postConditionMode: PostConditionMode.Deny,
+  });
+}
+
+/**
+ * Build and submit a withdraw transaction
+ * @param {Object} params - Transaction parameters
+ * @param {number} params.vaultId - Vault ID to withdraw from
+ * @param {Function} params.onFinish - Callback on transaction completion
+ * @param {Function} params.onCancel - Callback on user cancel
+ */
+export async function withdraw({ vaultId, onFinish, onCancel }) {
+  assertVaultId(vaultId);
+
+  await openContractCall({
+    ...getContractCallDefaultOptions(CONTRACT_NAMES.VAULT, 'request-withdraw', [uintCV(vaultId)], onFinish, onCancel),
+    postConditionMode: PostConditionMode.Allow,
+  });
+}
+
+/**
+ * Build and submit an emergency withdraw transaction
+ * @param {Object} params - Transaction parameters
+ * @param {number} params.vaultId - Vault ID to emergency withdraw from
+ * @param {Function} params.onFinish - Callback on transaction completion
+ * @param {Function} params.onCancel - Callback on user cancel
+ */
+export async function emergencyWithdraw({ vaultId, onFinish, onCancel }) {
+  assertVaultId(vaultId);
+
+  await openContractCall({
+    ...getContractCallDefaultOptions(CONTRACT_NAMES.EMERGENCY, 'request-emergency-withdraw', [uintCV(vaultId)], onFinish, onCancel),
+    postConditionMode: PostConditionMode.Allow,
+  });
+}
+
+/**
+ * Build and submit a claim rewards transaction
+ * @param {Object} params - Transaction parameters
+ * @param {number} params.vaultId - Vault ID to claim rewards for
+ * @param {Function} params.onFinish - Callback on transaction completion
+ * @param {Function} params.onCancel - Callback on user cancel
+ */
+export async function claimRewards({ vaultId, onFinish, onCancel }) {
+  assertVaultId(vaultId);
+
+  await openContractCall({
+    ...getContractCallDefaultOptions(CONTRACT_NAMES.REWARDS, 'request-claim-rewards', [uintCV(vaultId)], onFinish, onCancel),
+    postConditionMode: PostConditionMode.Allow,
+  });
+}
+
+/**
+ * Build and submit a vote transaction
+ * @param {Object} params - Transaction parameters
+ * @param {number} params.proposalId - Proposal ID to vote on
+ * @param {number} params.vaultId - Vault ID used as voting power
+ * @param {boolean} params.inFavor - Vote in favor or against
+ * @param {Function} params.onFinish - Callback on transaction completion
+ * @param {Function} params.onCancel - Callback on user cancel
+ */
+export async function vote({ proposalId, vaultId, inFavor, onFinish, onCancel }) {
+  if (proposalId === undefined || proposalId === null) {
+    throw new Error('proposalId is required to cast a governance vote');
+  }
+
+  if (vaultId === undefined || vaultId === null) {
+    throw new Error('vaultId is required to cast a governance vote');
+  }
+
+  await openContractCall({
+    ...getContractCallDefaultOptions(CONTRACT_NAMES.GOVERNANCE, 'cast-vote', [uintCV(proposalId), uintCV(vaultId), boolCV(Boolean(inFavor))], onFinish, onCancel),
+    postConditionMode: PostConditionMode.Deny,
+  });
+}
+
+/**
+ * Estimate transaction fee
+ * @param {string} functionName - Contract function name
+ * @returns {number} Estimated fee in microSTX
+ */
+export function estimateFee(functionName) {
+  // Base fees for different operations (in microSTX)
+  const fees = Object.freeze({
+    'create-vault': 5000,
+    'request-withdraw': 3000,
+    'request-emergency-withdraw': 4000,
+    'request-claim-rewards': 3000,
+    'cast-vote': 2000,
+  });
+  
+  return fees[functionName] ?? 3000;
+}
+
+/**
+ * Transaction Service - Build and submit Stacks blockchain transactions.
+ */
+export default {
+  createVault,
+  withdraw,
+  emergencyWithdraw,
+  claimRewards,
+  vote,
+  estimateFee,
+};

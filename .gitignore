@@ -1,0 +1,54 @@
+# Clarinet
+.clarinet/
+Clarinet.lock
+deployments/*.yaml
+!deployments/default.simnet-plan.yaml
+
+# Build and Caches
+dist/
+build/
+out/
+.cache/
+*.tsbuildinfo
+*.log
+.eslintcache
+.vite
+.vitest-cache
+coverage/
+.nyc_output/
+*.lcov
+
+# OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Secrets
+settings/
+.env
+.env.local
+.env*.local
+.env*.production
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Backup files
+*.bak
+*.tmp
+*~
+
+# Test data (contains sensitive wallet info)
+test/

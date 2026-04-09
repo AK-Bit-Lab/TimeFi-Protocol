@@ -1,0 +1,132 @@
+.error-boundary {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: radial-gradient(circle at center, rgba(31, 41, 55, 1) 0%, rgba(15, 23, 42, 1) 100%);
+}
+
+.error-boundary-content {
+  max-width: 500px;
+  text-align: center;
+}
+
+.error-boundary-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.2));
+}
+
+.error-boundary h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f8f9fa;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.error-boundary p {
+  color: var(--text-secondary, #6b7280);
+  margin: 0 0 1.5rem;
+}
+
+.error-boundary-guidance {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.error-boundary-guidance-item {
+  display: grid;
+  gap: 0.25rem;
+  text-align: left;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.error-boundary-guidance-item strong {
+  color: #f8f9fa;
+  font-size: 0.875rem;
+}
+
+.error-boundary-guidance-item span {
+  color: #b2bdc9;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.error-boundary-details {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.error-boundary-details summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.error-boundary-details pre {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  color: #f87171;
+  border-radius: 8px;
+  margin: 0.75rem 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid rgba(239, 68, 68, 0.1);
+}
+
+.error-boundary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Minimal Error Boundary */
+.error-boundary-minimal {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--error-bg, rgba(239, 68, 68, 0.1));
+  border: 1px solid var(--error, #ef4444);
+  border-radius: 0.5rem;
+  color: var(--error, #ef4444);
+}
+
+.error-boundary-minimal p {
+  margin: 0;
+  flex: 1;
+}
+
+.error-boundary-minimal button {
+  background: none;
+  border: none;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .error-boundary-actions {
+    flex-direction: column;
+  }
+}

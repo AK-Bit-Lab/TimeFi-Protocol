@@ -1,0 +1,102 @@
+# Contributing to TimeFi Protocol
+
+Thank you for your interest in contributing to TimeFi Protocol!
+
+## Development Setup
+
+### Prerequisites
+
+- Node.js 18+
+- Clarinet CLI installed
+- Git
+
+### Getting Started
+
+1. Fork the repository
+2. Clone your fork:
+   ```bash
+   git clone https://github.com/AdekunleBamz/TimeFi-Protocol.git
+   cd TimeFi-Protocol
+   ```
+
+3. Install dependencies:
+   ```bash
+   npm ci
+   ```
+
+4. Run tests:
+   ```bash
+   npm test
+   ```
+
+### Sub-project Development
+
+The project consists of multiple components. Please refer to their respective READMEs for specific development instructions:
+
+- **Frontend**: [frontend/README.md](frontend/README.md)
+- **SDK**: [sdk/README.md](sdk/README.md)
+- **Contracts**: [docs/API.md](docs/API.md) and files in `contracts/`
+
+## Making Changes
+
+### Branch Naming
+
+- `feat/` - New features
+- `fix/` - Bug fixes
+- `docs/` - Documentation
+- `test/` - Test additions
+- `chore/` - Maintenance
+
+### Commit Messages
+
+Follow conventional commits:
+
+- `feat:` - New feature
+- `fix:` - Bug fix
+- `docs:` - Documentation
+- `test:` - Tests
+- `chore:` - Maintenance
+
+### Pull Requests
+
+1. Create a feature branch from `main`
+2. Make your changes
+3. Run tests locally
+4. Run `npm run check` from repository root
+5. Push and create a PR
+6. Wait for review
+
+## Contract Development
+
+### Running Clarinet
+
+```bash
+# Check contract syntax
+clarinet check
+
+# Run tests
+clarinet test
+
+# Start devnet
+clarinet devnet start
+```
+
+### Testing Guidelines
+
+- Write tests for all new functions.
+- Test both success and error cases.
+- Test boundary conditions.
+
+## Code Style
+
+- Use clear, descriptive names
+- Add comments for complex logic
+- Keep functions focused and small
+
+## Questions?
+
+Open an issue for questions or discussion.
+
+## Contact
+
+For direct questions, reach out to **adekunlebamz** on GitHub.

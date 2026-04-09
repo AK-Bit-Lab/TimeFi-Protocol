@@ -1,0 +1,58 @@
+{
+  "name": "timefi-protocol",
+  "version": "1.0.1",
+  "description": "TimeFi Protocol - Time-locked vaults for disciplined savings on Stacks blockchain.",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "contracts:check": "clarinet check",
+    "contracts:console": "clarinet console",
+    "check": "npm run contracts:check",
+    "console": "npm run contracts:console",
+    "frontend:dev": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build",
+    "sdk:build": "npm --prefix sdk run build",
+    "test": "vitest run",
+    "test:report": "vitest run --coverage --costs",
+    "test:watch": "chokidar \"tests/**/*.ts\" \"contracts/**/*.clar\" -c \"npm run test:report\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
+  },
+  "author": "adekunlebamz <bams.kunle@gmail.com>",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdekunleBamz/TimeFi-Protocol.git"
+  },
+  "homepage": "https://github.com/AdekunleBamz/TimeFi-Protocol#readme",
+  "bugs": {
+    "url": "https://github.com/AdekunleBamz/TimeFi-Protocol/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@stacks/clarinet-sdk": "^3.9.0",
+    "@stacks/transactions": "^7.2.0",
+    "@types/node": "^24.4.0",
+    "chokidar-cli": "^3.0.0",
+    "timefi-sdk": "^0.1.0",
+    "vitest": "^4.0.7",
+    "vitest-environment-clarinet": "^3.0.0"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}
