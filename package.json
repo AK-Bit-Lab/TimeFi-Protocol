@@ -1,6 +1,6 @@
 {
   "name": "timefi-protocol",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TimeFi Protocol - Time-locked vaults for disciplined savings on Stacks blockchain.",
   "type": "module",
   "main": "./index.js",
@@ -34,11 +34,11 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AdekunleBamz/TimeFi-Protocol.git"
+    "url": "git+https://github.com/AK-Bit-Lab/timefi-protocol.git"
   },
-  "homepage": "https://github.com/AdekunleBamz/TimeFi-Protocol#readme",
+  "homepage": "https://github.com/AK-Bit-Lab/timefi-protocol#readme",
   "bugs": {
-    "url": "https://github.com/AdekunleBamz/TimeFi-Protocol/issues"
+    "url": "https://github.com/AK-Bit-Lab/timefi-protocol/issues"
   },
   "publishConfig": {
     "access": "public"
