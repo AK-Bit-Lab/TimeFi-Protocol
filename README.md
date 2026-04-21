@@ -199,7 +199,7 @@ FEE_BPS: 50 (0.5%)
 ### ⚙️ Deployment Settings
 - **Clarinet Settings**: [settings/Clarinet.toml](settings/Clarinet.toml)
 - **Mainnet Plan**: [deployments/default.mainnet-plan.yaml](deployments/default.mainnet-plan.yaml)
-- **Testnet Plan**: [deployments/default.testnet-plan.yaml](deployments/default.testnet-plan.yaml)
+- **Simnet Plan**: [deployments/default.simnet-plan.yaml](deployments/default.simnet-plan.yaml)
 
 ## 🗳️ Governance
 
